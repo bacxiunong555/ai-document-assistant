@@ -1,0 +1,230 @@
+/* ===== WRAPPER & PAGE ===== */
+.document-wrapper {
+  background: #f0f0f0;
+  padding: 24px;
+  min-height: 100%;
+  display: flex;
+  justify-content: center;
+  overflow-y: auto;
+  border-radius: 8px;
+}
+
+.document-page {
+  background: white;
+  width: 210mm;
+  min-height: 297mm;
+  padding: 20mm 20mm 20mm 30mm;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 13pt;
+  line-height: 1.5;
+  color: #000;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  box-sizing: border-box;
+}
+
+/* ===== HEADER 2 CỘT ===== */
+.doc-header {
+  display: grid;
+  grid-template-columns: 40% 60%;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.doc-header-left, .doc-header-right {
+  text-align: center;
+}
+
+.doc-co-quan-cap-tren {
+  font-size: 12pt;
+  text-transform: uppercase;
+  margin: 0 0 2px 0;
+}
+
+.doc-co-quan-chinh {
+  font-size: 13pt;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin: 0 0 4px 0;
+}
+
+.doc-quoc-hieu {
+  font-size: 13pt;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin: 0 0 2px 0;
+}
+
+.doc-tieu-ngu {
+  font-size: 13pt;
+  font-weight: bold;
+  padding-bottom: 4px;
+  margin: 0 auto 6px auto;
+}
+
+.doc-duong-ke {
+  width: 60%;
+  margin: 2px auto 6px auto;
+  border-bottom: 1px solid #000;
+}
+
+.doc-so-ky-hieu {
+  font-size: 13pt;
+  margin: 0;
+  font-style: italic;
+  white-space: nowrap;
+}
+
+.doc-dia-danh {
+  font-size: 13pt;
+  font-style: italic;
+  margin: 0;
+}
+
+/* ===== PHẦN TÊN LOẠI + TRÍCH YẾU ===== */
+.doc-title-section {
+  text-align: center;
+  margin: 24px 0 20px 0;
+}
+
+.doc-ten-loai {
+  font-size: 14pt;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 0 0 6px 0;
+}
+
+.doc-trich-yeu {
+  font-size: 13pt;
+  font-weight: bold;
+  margin: 0 0 8px 0;
+}
+
+.doc-duong-ke-ngan {
+  width: 40%;
+  margin: 0 auto;
+  border-bottom: 1px solid #000;
+}
+
+/* ===== NỘI DUNG CHÍNH ===== */
+.doc-noi-dung {
+  margin: 20px 0 30px 0;
+  text-align: justify;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-size: 13pt;
+  line-height: 1.6;
+}
+
+.doc-noi-dung p {
+  text-indent: 1.27cm;
+  margin: 0;
+  min-height: 1.5em; /* Đảm bảo dòng trống hiển thị */
+}
+
+/* ===== FOOTER 2 CỘT ===== */
+.doc-footer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.doc-footer-left {
+  font-size: 12pt;
+}
+
+.doc-noi-nhan-title {
+  font-weight: bold;
+  font-style: italic;
+  font-size: 12pt;
+  margin: 0 0 4px 0;
+}
+
+.doc-noi-nhan-line {
+  margin: 0;
+  font-size: 11pt;
+}
+
+.doc-footer-right {
+  text-align: center;
+}
+
+.doc-chuc_vu {
+  font-weight: bold;
+  text-transform: uppercase;
+  margin: 0 0 60px 0;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.doc-ho-ten {
+  font-weight: bold;
+  margin: 0;
+  text-align: center;
+  padding: 0 20px;
+}
+
+/* ===== CSS PRINT ===== */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .document-page,
+  .document-page * {
+    visibility: visible;
+  }
+  .document-page {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 210mm;
+    margin: 0;
+    padding: 20mm 20mm 20mm 30mm;
+    box-shadow: none;
+    background: white;
+    min-height: auto;
+  }
+  /* Header 2 cột: cột phải rộng hơn cho Quốc hiệu */
+  .doc-header {
+    grid-template-columns: 45% 55%;
+  }
+  .doc-co-quan-cap-tren {
+    font-size: 11pt;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+  .doc-co-quan-chinh {
+    font-size: 11pt;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+  .doc-quoc-hieu {
+    font-size: 12pt;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+  /* Watermark */
+  .document-page.watermark::before {
+    content: 'BẢN NHÁP';
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-45deg);
+    font-size: 80pt;
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.06);
+    z-index: 9999;
+    pointer-events: none;
+    visibility: visible;
+  }
+}
+
+@media (max-width: 768px) {
+  .document-page {
+    width: 100%;
+    padding: 16px;
+    font-size: 11pt;
+  }
+  .doc-ten-loai { font-size: 12pt; }
+}

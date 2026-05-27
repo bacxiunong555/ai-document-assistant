@@ -1,0 +1,169 @@
+.doc-detail-container {
+  padding: 24px;
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.doc-detail-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: transparent;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--color-border, #e2e8f0);
+}
+
+.btn-back {
+  background: white;
+  border: 1px solid var(--color-border, #cbd5e1);
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  color: var(--color-text, #334155);
+  transition: all 0.2s;
+}
+
+.btn-back:hover {
+  background-color: var(--color-bg-hover, #f1f5f9);
+}
+
+.toolbar-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-approve {
+  background-color: #22c55e;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn-approve:hover {
+  opacity: 0.9;
+}
+
+.btn-download {
+  background-color: white;
+  border: 1px solid var(--color-border, #cbd5e1);
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 500;
+  color: var(--color-text, #334155);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-download:hover {
+  background-color: var(--color-bg-hover, #f1f5f9);
+}
+
+.btn-delete {
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn-delete:hover {
+  opacity: 0.9;
+}
+
+/* PHẦN 2 — Thông tin tóm tắt */
+.doc-summary-card {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  background-color: white;
+  padding: 16px 24px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--color-border, #e2e8f0);
+}
+
+.summary-col {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.summary-label {
+  font-size: 12px;
+  color: #64748b;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.summary-value {
+  font-size: 15px;
+  font-weight: 500;
+  color: #1e293b;
+}
+
+/* PHẦN 3 — Nội dung văn bản */
+.doc-detail-content {
+  flex: 1;
+  background: white;
+  padding: 32px 48px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  margin-bottom: 24px;
+}
+
+.doc-detail-sources {
+  background: white;
+  padding: 24px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+}
+
+.btn-toolbar:hover {
+  background: #f1f5f9 !important;
+  color: #0ea5e9 !important;
+}
+.btn-toolbar:active {
+  background: #e2e8f0 !important;
+}
+
+/* Loading & Error */
+.doc-detail-loading,
+.doc-detail-error {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  gap: 16px;
+}
+
+.doc-detail-error h2 {
+  color: #ef4444;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #f3f4f6;
+  border-top-color: #0ea5e9;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
