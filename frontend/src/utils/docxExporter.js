@@ -55,16 +55,16 @@ function buildHeaderTable(data) {
   const leftCells = [];
   if (data.ten_co_quan?.cap_tren) {
     const capTren = data.ten_co_quan.cap_tren;
-    leftCells.push(centeredPara(capTren, { size: capTren.length > 25 ? 10.5 : 11, allCaps: true }));
+    leftCells.push(centeredPara(capTren, { size: 12, allCaps: true }));
   }
   const coQuanChinh = data.ten_co_quan?.chinh || '';
-  leftCells.push(centeredPara(coQuanChinh, { size: coQuanChinh.length > 25 ? 10.5 : 11.5, bold: true, allCaps: true }));
+  leftCells.push(centeredPara(coQuanChinh, { size: 12, bold: true, allCaps: true }));
   leftCells.push(separatorPara(12));
-  leftCells.push(centeredPara(data.so_ky_hieu || '', { size: 13, italic: true }));
+  leftCells.push(centeredPara(data.so_ky_hieu || '', { size: 13 })); // Số ký hiệu chữ Đứng, cỡ 13
 
   const rightCells = [];
-  rightCells.push(centeredPara(data.quoc_hieu?.dong1 || 'CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM', { size: 11.5, bold: true, allCaps: true }));
-  rightCells.push(centeredPara(data.quoc_hieu?.dong2 || 'Độc lập - Tự do - Hạnh phúc', { size: 12.5, bold: true }));
+  rightCells.push(centeredPara(data.quoc_hieu?.dong1 || 'CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM', { size: 12, bold: true, allCaps: true }));
+  rightCells.push(centeredPara(data.quoc_hieu?.dong2 || 'Độc lập - Tự do - Hạnh phúc', { size: 13, bold: true }));
   rightCells.push(separatorPara(20));
   rightCells.push(centeredPara(data.dia_danh_thoi_gian || '', { size: 13, italic: true }));
 
@@ -113,7 +113,7 @@ function buildTitleSection(data) {
 
 function isHeadingLine(line) {
   const trimmed = line.trim();
-  if (/^(Điều\s+\d|QUYẾT ĐỊNH|NGHỊ QUYẾT|CHỈ THỊ)/i.test(trimmed)) return true;
+  if (/^(QUYẾT ĐỊNH|NGHỊ QUYẾT|CHỈ THỊ)/i.test(trimmed)) return true;
   if (/^\*\*.*\*\*$/.test(trimmed)) return true;
   if (/^[IVX]+\.\s/.test(trimmed)) return true;
   if (/^\d+\.\s+[A-ZÀÁẢÃẠ]/.test(trimmed)) return true;
@@ -126,7 +126,18 @@ function isCancuLine(line) {
 
 function buildContentParagraphs(noiDung) {
   if (!noiDung) return [];
-  const lines = noiDung.split('\n');
+
+  // Lọc sạch thẻ HTML do trình soạn thảo sinh ra, chuyển thành dấu xuống dòng (\n)
+  let cleanText = noiDung
+    .replace(/<\/p>/gi, '\n')
+    .replace(/<br\s*\/?>/gi, '\n')
+    .replace(/<\/div>/gi, '\n')
+    .replace(/<[^>]+>/g, '') // Xóa sạch các thẻ còn lại
+    .replace(/&nbsp;/g, ' ')
+    .replace(/\/\./g, ''); // Xóa dấu /. thường dính ở cuối câu
+
+  const lines = cleanText.split('\n');
+
   return lines.map(line => {
     const trimmed = line.trim();
     if (!trimmed) {
@@ -135,6 +146,16 @@ function buildContentParagraphs(noiDung) {
 
     // Remove markdown bold markers
     const cleanLine = trimmed.replace(/\*\*/g, '');
+    const upperLine = cleanLine.toUpperCase();
+
+    // Xử lý riêng chữ QUYẾT ĐỊNH: phải căn giữa, in đậm, không thụt lề
+    if (upperLine === 'QUYẾT ĐỊNH:' || upperLine === 'QUYẾT ĐỊNH' || upperLine === 'NAY QUYẾT ĐỊNH:') {
+      return new Paragraph({
+        alignment: AlignmentType.CENTER,
+        children: [new TextRun({ text: cleanLine, font: FONT, size: PT(13), bold: true })],
+        spacing: { before: 200, after: 200 },
+      });
+    }
 
     if (isHeadingLine(trimmed)) {
       return new Paragraph({
@@ -171,8 +192,12 @@ function buildFooterTable(data, options = {}) {
   }));
   if (data.noi_nhan) {
     data.noi_nhan.forEach(line => {
+      let cleanLine = line.trim();
+      if (cleanLine.startsWith('-')) {
+        cleanLine = cleanLine.substring(1).trim();
+      }
       noiNhanChildren.push(new Paragraph({
-        children: [new TextRun({ text: `- ${line}`, font: FONT, size: PT(11) })],
+        children: [new TextRun({ text: `- ${cleanLine}`, font: FONT, size: PT(11) })],
         spacing: { after: 20 },
       }));
     });

@@ -18,19 +18,21 @@
   font-size: 13pt;
   line-height: 1.5;
   color: #000;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   box-sizing: border-box;
 }
 
 /* ===== HEADER 2 CỘT ===== */
 .doc-header {
   display: grid;
-  grid-template-columns: 40% 60%;
-  gap: 16px;
+  grid-template-columns: 50% 50%;
+  gap: 8px;
+  /* Giảm khoảng cách giữa 2 cột để có thêm không gian cho chữ */
   margin-bottom: 20px;
 }
 
-.doc-header-left, .doc-header-right {
+.doc-header-left,
+.doc-header-right {
   text-align: center;
 }
 
@@ -41,14 +43,16 @@
 }
 
 .doc-co-quan-chinh {
-  font-size: 13pt;
+  font-size: 12pt;
   font-weight: bold;
   text-transform: uppercase;
   margin: 0 0 4px 0;
 }
 
+
+
 .doc-quoc-hieu {
-  font-size: 13pt;
+  font-size: 12pt;
   font-weight: bold;
   text-transform: uppercase;
   margin: 0 0 2px 0;
@@ -70,7 +74,8 @@
 .doc-so-ky-hieu {
   font-size: 13pt;
   margin: 0;
-  font-style: italic;
+  font-style: normal;
+  /* Sửa từ italic thành normal chuẩn NĐ 30 */
   white-space: nowrap;
 }
 
@@ -119,7 +124,8 @@
 .doc-noi-dung p {
   text-indent: 1.27cm;
   margin: 0;
-  min-height: 1.5em; /* Đảm bảo dòng trống hiển thị */
+  min-height: 1.5em;
+  /* Đảm bảo dòng trống hiển thị */
 }
 
 /* ===== FOOTER 2 CỘT ===== */
@@ -167,43 +173,65 @@
 
 /* ===== CSS PRINT ===== */
 @media print {
+  @page {
+    size: A4;
+    margin: 0;
+    /* Ép lề 0 để ẩn Header/Footer của trình duyệt */
+  }
+
+  /* XÓA BỎ MỌI MÀU NỀN CỦA GIAO DIỆN WEB */
+  * {
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  html,
+  body {
+    width: 100%;
+    height: 100%;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white !important;
+    /* Chỉ giữ nền trắng cho toàn bộ giấy */
+  }
+
+  /* Ẩn tất cả mọi thứ trên web (Sidebar, header, button...) */
   body * {
     visibility: hidden;
   }
+
+  /* Chỉ hiển thị duy nhất trang văn bản */
   .document-page,
   .document-page * {
     visibility: visible;
   }
+
   .document-page {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 210mm;
-    margin: 0;
-    padding: 20mm 20mm 20mm 30mm;
-    box-shadow: none;
-    background: white;
-    min-height: auto;
+    position: absolute !important;
+    /* Dùng absolute để ghi đè mọi layout tĩnh */
+    top: 0 !important;
+    left: 0 !important;
+    width: 210mm !important;
+    min-height: 297mm !important;
+    margin: 0 !important;
+    padding: 20mm 20mm 20mm 30mm !important;
+    /* Trả lại lề chuẩn Nghị định 30 */
+    background: white !important;
+    border: none !important;
+    box-sizing: border-box !important;
   }
+
   /* Header 2 cột: cột phải rộng hơn cho Quốc hiệu */
   .doc-header {
     grid-template-columns: 45% 55%;
   }
-  .doc-co-quan-cap-tren {
-    font-size: 11pt;
-    word-break: break-word;
-    overflow-wrap: break-word;
-  }
-  .doc-co-quan-chinh {
-    font-size: 11pt;
-    word-break: break-word;
-    overflow-wrap: break-word;
-  }
+
+  .doc-co-quan-cap-tren,
+  .doc-co-quan-chinh,
   .doc-quoc-hieu {
-    font-size: 12pt;
-    word-break: break-word;
-    overflow-wrap: break-word;
+    word-break: normal;
   }
+
   /* Watermark */
   .document-page.watermark::before {
     content: 'BẢN NHÁP';
@@ -226,5 +254,8 @@
     padding: 16px;
     font-size: 11pt;
   }
-  .doc-ten-loai { font-size: 12pt; }
+
+  .doc-ten-loai {
+    font-size: 12pt;
+  }
 }

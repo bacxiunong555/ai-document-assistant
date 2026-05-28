@@ -22,10 +22,11 @@ function EditableText({ value, path, isEditing, onFieldChange, tag: Tag = 'p', c
 function EditableTextarea({ value, path, isEditing, onFieldChange }) {
   const getInitialHtml = () => {
     if (!value) return '';
-    if (value.includes('</p>') || value.includes('</div>') || value.includes('<br>')) {
-      return value;
+    let cleanVal = value.replace(/\/\./g, ''); // Xóa ký tự kết thúc văn bản kiểu cũ (./.)
+    if (cleanVal.includes('</p>') || cleanVal.includes('</div>') || cleanVal.includes('<br>')) {
+      return cleanVal;
     }
-    return value.split('\n').map(p => {
+    return cleanVal.split('\n').map(p => {
       const trimmed = p.trim().toUpperCase();
       if (trimmed === 'QUYẾT ĐỊNH:' || trimmed === 'QUYẾT ĐỊNH' || trimmed === 'NAY QUYẾT ĐỊNH:') {
         return `<p style="text-align: center; font-weight: bold; margin: 16px 0;">${p}</p>`;
