@@ -34,7 +34,7 @@ def generate():
         data = request.get_json(force=True)
         user_id = int(get_jwt_identity())
         result = create_draft(data, user_id)
-        logger.info(
+        logger.warning(
             "[DraftingAPI] result keys=%s sources=%d references=%d",
             sorted(result.keys()) if isinstance(result, dict) else type(result),
             len(result.get("sources", [])) if isinstance(result, dict) else 0,

@@ -96,7 +96,8 @@ export default function DocumentRenderer({ data, status, errorMessage, isEditing
 
   if (!data) return null;
 
-  const isCongVan = data.ten_loai === 'CÔNG VĂN';
+  const normalizedTenLoai = (data.ten_loai || '').toString().trim().toUpperCase();
+  const isCongVan = normalizedTenLoai === 'CÔNG VĂN' || normalizedTenLoai.includes('CÔNG VĂN');
   const ef = onFieldChange || (() => { });
 
   return (

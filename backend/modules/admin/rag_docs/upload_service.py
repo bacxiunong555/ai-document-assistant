@@ -160,25 +160,28 @@ def reindex_all_raw_documents(chunk_size: int = 1000, chunk_overlap: int = 200) 
     from backend.extensions import db
     from backend.models.rag_document import RagDocument
 
+    logger.warning("[ReindexAll] Start raw_dir=%s chunk_size=%s overlap=%s", RAW_DIR, chunk_size, chunk_overlap)
     os.makedirs(RAW_DIR, exist_ok=True)
-    vector_store = reset_vector_store()
     supported_exts = {".pdf", ".doc", ".docx", ".txt", ".md"}
+    raw_files = [
+        filename for filename in sorted(os.listdir(RAW_DIR))
+        if not filename.startswith(".")
+        and os.path.isfile(os.path.join(RAW_DIR, filename))
+    ]
+    supported_files = [
+        filename for filename in raw_files
+        if os.path.splitext(filename)[1].lower() in supported_exts
+    ]
+    logger.warning("[ReindexAll] Raw files=%d supported=%d", len(raw_files), len(supported_files))
+    vector_store = reset_vector_store()
 
     indexed_files = 0
     total_chunks = 0
     errors = []
 
-    for filename in sorted(os.listdir(RAW_DIR)):
-        if filename.startswith("."):
-            continue
-
+    for filename in supported_files:
         file_path = os.path.join(RAW_DIR, filename)
-        if not os.path.isfile(file_path):
-            continue
-
         ext = os.path.splitext(filename)[1].lower()
-        if ext not in supported_exts:
-            continue
 
         rag_doc = RagDocument.query.filter_by(filename=filename).first()
         if not rag_doc:
@@ -193,7 +196,10 @@ def reindex_all_raw_documents(chunk_size: int = 1000, chunk_overlap: int = 200) 
             db.session.flush()
 
         try:
-            category = rag_doc.category or detect_doc_type(filename)
+            detected_category = detect_doc_type(filename)
+            category = rag_doc.category or detected_category
+            if category == "general" and detected_category != "general":
+                category = detected_category
             docs = _load_file(file_path, filename)
             source = os.path.splitext(filename)[0]
             for doc in docs:
@@ -203,6 +209,7 @@ def reindex_all_raw_documents(chunk_size: int = 1000, chunk_overlap: int = 200) 
 
             chunks = chunk_documents(docs, chunk_size=chunk_size, chunk_overlap=chunk_overlap)
             vector_store.add_documents(chunks)
+            logger.warning("[ReindexAll] Indexed %s category=%s chunks=%d", filename, category, len(chunks))
 
             rag_doc.file_type = ext.lstrip(".")
             rag_doc.category = category
@@ -215,10 +222,32 @@ def reindex_all_raw_documents(chunk_size: int = 1000, chunk_overlap: int = 200) 
             rag_doc.status = "Lỗi"
             rag_doc.updated_at = datetime.utcnow()
             errors.append({"filename": filename, "message": str(e)})
+            logger.exception("[ReindexAll] Loi khi index %s", filename)
 
     db.session.commit()
+    try:
+        chroma_count = vector_store.get_collection_count()
+    except Exception:
+        chroma_count = None
+    try:
+        import chromadb
+        from chromadb.config import Settings
+        from backend.config import Config
+        client = chromadb.PersistentClient(
+            path=Config.CHROMA_PERSIST_DIR,
+            settings=Settings(anonymized_telemetry=False),
+        )
+        disk_count = client.get_collection(Config.CHROMA_COLLECTION_NAME).count()
+    except Exception:
+        disk_count = None
+    logger.warning("[ReindexAll] Done raw_files=%d supported=%d indexed_files=%d total_chunks=%d chroma_count=%s disk_count=%s errors=%d",
+                   len(raw_files), len(supported_files), indexed_files, total_chunks, chroma_count, disk_count, len(errors))
     return {
+        "raw_file_count": len(raw_files),
+        "supported_file_count": len(supported_files),
         "indexed_files": indexed_files,
         "total_chunks": total_chunks,
+        "chroma_count": chroma_count,
+        "disk_count": disk_count,
         "errors": errors,
     }

@@ -1,14 +1,16 @@
 from flask import Blueprint, jsonify, request
 import os
+import logging
 
 admin_rag_docs_bp = Blueprint("admin_rag_docs", __name__, url_prefix="/api/admin")
+logger = logging.getLogger(__name__)
 
 @admin_rag_docs_bp.route("/rag-documents", methods=["GET"])
 def get_rag_documents():
     from backend.models.rag_document import RagDocument
     from backend.extensions import db
     
-    # Lấy từ thư mục raw
+    # Lấy từ thư mục raw. Chỉ tạo record quản trị, không giả lập "Đã index".
     raw_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../backend/data/raw"))
     raw_files = []
     if os.path.exists(raw_dir):
@@ -19,12 +21,13 @@ def get_rag_documents():
         if f.startswith("."): continue
         existing = RagDocument.query.filter_by(filename=f).first()
         if not existing:
+            from backend.modules.admin.rag_docs.upload_service import detect_doc_type
             doc = RagDocument(
                 filename=f,
                 file_type=f.split('.')[-1] if '.' in f else "unknown",
-                category="general",
-                status="Đã index", # Mặc định file đã có là đã index
-                chunk_count=10 # giả lập
+                category=detect_doc_type(f),
+                status="Chưa index",
+                chunk_count=0
             )
             db.session.add(doc)
     db.session.commit()
@@ -81,6 +84,7 @@ def reindex_rag_documents():
         chunk_size=chunk_size,
         chunk_overlap=chunk_overlap,
     )
+    logger.warning("[RAGAdmin] Re-index result: %s", result)
     return jsonify({"success": True, "data": result})
 
 @admin_rag_docs_bp.route("/upload-history", methods=["GET"])

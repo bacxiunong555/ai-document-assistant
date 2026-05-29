@@ -12,6 +12,8 @@ const formatScore = (score) => {
 };
 
 export default function SourcesPanel({ sources, references }) {
+  const hasSourceField = Array.isArray(sources);
+  const hasReferenceField = Array.isArray(references);
   const hasReferences = references && references.length > 0;
   const hasSources = sources && sources.length > 0;
 
@@ -24,6 +26,10 @@ export default function SourcesPanel({ sources, references }) {
             sources.map((src, i) => (
               <span key={i} className="source-tag">{src}</span>
             ))
+          ) : hasSourceField || hasReferenceField ? (
+            <span className="source-empty">
+              RAG không trả về nguồn phù hợp cho truy vấn này.
+            </span>
           ) : (
             <span className="source-empty">
               Chưa có metadata nguồn trong response. Hãy restart backend rồi soạn lại.

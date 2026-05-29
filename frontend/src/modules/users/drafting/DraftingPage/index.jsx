@@ -127,12 +127,6 @@ export default function DraftingPage() {
           </div>
 
           <div style={{ padding: '16px', flex: 1, overflowY: 'auto' }}>
-            {status === 'done' && documentData && (
-              <SourcesPanel
-                sources={documentData.sources}
-                references={documentData.rag_references}
-              />
-            )}
             <DocumentRenderer
               data={documentData}
               status={status}
@@ -140,6 +134,12 @@ export default function DraftingPage() {
               isEditing={isEditing}
               onFieldChange={updateField}
             />
+            {status === 'done' && documentData && (
+              <SourcesPanel
+                sources={documentData.sources}
+                references={documentData.rag_references}
+              />
+            )}
           </div>
         </div>
       </div>

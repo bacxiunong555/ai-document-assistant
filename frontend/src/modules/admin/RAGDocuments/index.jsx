@@ -62,7 +62,9 @@ const RAGDocuments = () => {
     try {
       const res = await adminService.reindexRagDocuments();
       const data = res.data?.data;
-      alert(`Re-index hoàn tất: ${data?.indexed_files || 0} file, ${data?.total_chunks || 0} chunks`);
+      const rawCount = data?.raw_file_count ?? 'N/A';
+      const supportedCount = data?.supported_file_count ?? 'N/A';
+      alert(`Re-index hoàn tất: raw ${rawCount} file, hỗ trợ ${supportedCount} file, đã index ${data?.indexed_files || 0} file, ${data?.total_chunks || 0} chunks, Chroma: ${data?.chroma_count ?? 'N/A'}, Disk: ${data?.disk_count ?? 'N/A'}`);
       fetchData();
     } catch (error) {
       alert("Lỗi khi re-index tài liệu");

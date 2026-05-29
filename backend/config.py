@@ -47,4 +47,4 @@ class Config:
 
     # LLM
     LLM_TEMPERATURE = 0.1
-    LLM_NUM_PREDICT = 2048
+    LLM_NUM_PREDICT = int(os.getenv("LLM_NUM_PREDICT", "2048"))

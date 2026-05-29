@@ -7,9 +7,10 @@ QUY TẮC BẮT BUỘC:
 3. Trường noi_dung phải đầy đủ, hoàn chỉnh, sẵn sàng ký ban hành.
 4. Trường ten_loai phải IN HOA toàn bộ.
 5. Trả về đúng 9 trường theo schema được yêu cầu, không thêm không bớt.
-6. Viết hoa: họ tên người hoa tất cả âm tiết. Chức vụ phần ký IN HOA. Họ tên phần ký hoa đầu âm tiết, KHÔNG in hoa toàn bộ.
+6. Viết hoa: chức vụ phần ký IN HOA. Họ tên phần ký chỉ viết hoa chữ cái đầu mỗi âm tiết, KHÔNG in hoa toàn bộ.
 7. Văn bản PHẢI kết thúc trường noi_dung bằng "./."
 8. Căn cứ pháp lý: mỗi dòng kết thúc ";", dòng cuối kết thúc ","
+9. Trường noi_dung TUYỆT ĐỐI không chứa phần Nơi nhận, chức vụ ký, họ tên người ký, dòng "Chủ tịch/Giám đốc..." hoặc bất kỳ khối chữ ký nào. Các thông tin đó chỉ đặt trong noi_nhan và ky_ten.
 
 Bạn là người SOẠN THẢO, không phải người điền form.
 Hãy TỰ VIẾT văn bản hoàn chỉnh như một chuyên gia thực thụ.
@@ -20,7 +21,7 @@ HUONG_DAN_NOI_DUNG = {
     "Nghị quyết": "Gồm: Căn cứ pháp lý, phần quyết nghị theo các điều/khoản rõ ràng, nhiệm vụ tổ chức thực hiện và hiệu lực thi hành. Trình bày trang trọng, đúng thẩm quyền ban hành.",
     "Quyết định": "CẢNH BÁO: Trường noi_dung PHẢI theo đúng cấu trúc: Căn cứ... → QUYẾT ĐỊNH: → Điều 1, Điều 2, Điều 3, Điều 4. TUYỆT ĐỐI KHÔNG viết theo dạng thông báo, công văn, hay văn xuôi tự do. Gồm: Căn cứ pháp lý (mỗi căn cứ 1 dòng, kết thúc ;), QUYẾT ĐỊNH:, Điều 1 (nội dung chính), Điều 2... (các điều liên quan), Điều cuối-1 (hiệu lực thi hành), Điều cuối (trách nhiệm thi hành).",
     "Văn bản có tên loại": "Soạn theo thể thức văn bản có tên loại: có tên loại ở giữa trang, trích yếu dưới tên loại, nội dung chia mục/điều/khoản phù hợp với yêu cầu.",
-    "Công văn": "KHÔNG có tên loại giữa trang. Trích yếu dạng 'V/v ...' nằm ở cột trái dưới số hiệu. Bắt đầu nội dung bằng 'Kính gửi: ...' Gồm: Đoạn mở đầu (lý do, căn cứ), Nội dung chính (các ý rõ ràng), Đề nghị/Yêu cầu cụ thể.",
+    "Công văn": "KHÔNG có tên loại giữa trang. Trích yếu dạng 'V/v ...' nằm ở cột trái dưới số hiệu. Bắt đầu nội dung bằng 'Kính gửi: ...' Gồm: Đoạn mở đầu (lý do, căn cứ), Nội dung chính (các ý rõ ràng), Đề nghị/Yêu cầu cụ thể. Kết thúc nội dung bằng câu hành chính dạng '... đề nghị các cơ quan, đơn vị nghiêm túc triển khai thực hiện./.' KHÔNG viết lời chào thương mại như 'Kính mong sự hợp tác'. KHÔNG đưa chức vụ ký, họ tên người ký vào noi_dung.",
     "Công điện": "Gồm phần nơi nhận điện, nội dung chỉ đạo/yêu cầu khẩn, nhiệm vụ cụ thể, thời hạn thực hiện nếu có. Văn phong ngắn gọn, rõ trách nhiệm, phù hợp tính chất công điện.",
     "Tờ trình": "Tờ trình BẮT BUỘC có đúng 3 phần với tiêu đề IN HOA, đánh số La Mã, KHÔNG dùng số thứ tự 1, 2, 3:\\n\\nI. SỰ CẦN THIẾT\\n(Trình bày lý do, thực trạng, sự cần thiết phải thực hiện)\\n\\nII. NỘI DUNG ĐỀ XUẤT\\n(Trình bày cụ thể nội dung xin phê duyệt: phạm vi, kinh phí, nguồn vốn, tiến độ...)\\n\\nIII. KIẾN NGHỊ\\n(Kính trình [tên cơ quan nhận] xem xét, chấp thuận...\\nKết thúc bằng ./)",
     "Báo cáo": "Gồm: I. Tình hình chung, II. Kết quả thực hiện, III. Tồn tại hạn chế, IV. Phương hướng nhiệm vụ.",
