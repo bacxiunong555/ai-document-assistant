@@ -25,7 +25,7 @@
 /* ===== HEADER 2 CỘT ===== */
 .doc-header {
   display: grid;
-  grid-template-columns: 50% 50%;
+  grid-template-columns: 45% 55%;
   gap: 8px;
   /* Giảm khoảng cách giữa 2 cột để có thêm không gian cho chữ */
   margin-bottom: 20px;
@@ -34,19 +34,24 @@
 .doc-header-left,
 .doc-header-right {
   text-align: center;
+  min-width: 0;
 }
 
 .doc-co-quan-cap-tren {
   font-size: 12pt;
+  line-height: 1.25;
   text-transform: uppercase;
   margin: 0 0 2px 0;
+  overflow-wrap: anywhere;
 }
 
 .doc-co-quan-chinh {
   font-size: 12pt;
+  line-height: 1.25;
   font-weight: bold;
   text-transform: uppercase;
   margin: 0 0 4px 0;
+  overflow-wrap: anywhere;
 }
 
 
@@ -56,6 +61,7 @@
   font-weight: bold;
   text-transform: uppercase;
   margin: 0 0 2px 0;
+  white-space: nowrap;
 }
 
 .doc-tieu-ngu {
@@ -63,6 +69,7 @@
   font-weight: bold;
   padding-bottom: 4px;
   margin: 0 auto 6px auto;
+  white-space: nowrap;
 }
 
 .doc-duong-ke {
@@ -223,13 +230,17 @@
 
   /* Header 2 cột: cột phải rộng hơn cho Quốc hiệu */
   .doc-header {
-    grid-template-columns: 45% 55%;
+    grid-template-columns: 43% 57%;
   }
 
   .doc-co-quan-cap-tren,
-  .doc-co-quan-chinh,
-  .doc-quoc-hieu {
-    word-break: normal;
+  .doc-co-quan-chinh {
+    overflow-wrap: anywhere;
+  }
+
+  .doc-quoc-hieu,
+  .doc-tieu-ngu {
+    white-space: nowrap;
   }
 
   /* Watermark */

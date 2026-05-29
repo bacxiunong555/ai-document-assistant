@@ -16,6 +16,7 @@ const RAGDocuments = () => {
   const [categoryFilter, setCategoryFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [openDropdownId, setOpenDropdownId] = useState(null);
+  const [isReindexing, setIsReindexing] = useState(false);
   const itemsPerPage = 6;
   const navigate = useNavigate();
 
@@ -50,6 +51,24 @@ const RAGDocuments = () => {
       }
     }
     setOpenDropdownId(null);
+  };
+
+  const handleReindexAll = async () => {
+    if (!window.confirm("Re-index sẽ xóa collection Chroma hiện tại và nạp lại toàn bộ tài liệu trong backend/data/raw. Tiếp tục?")) {
+      return;
+    }
+
+    setIsReindexing(true);
+    try {
+      const res = await adminService.reindexRagDocuments();
+      const data = res.data?.data;
+      alert(`Re-index hoàn tất: ${data?.indexed_files || 0} file, ${data?.total_chunks || 0} chunks`);
+      fetchData();
+    } catch (error) {
+      alert("Lỗi khi re-index tài liệu");
+    } finally {
+      setIsReindexing(false);
+    }
   };
 
   const filteredDocs = docs.filter(doc => {
@@ -135,7 +154,10 @@ const RAGDocuments = () => {
         <div className="rag-table-header">
           <h2>Danh sách tài liệu RAG</h2>
           <div className="rag-header-actions">
-            <button className="rag-btn-outline"><span className="icon-mr"><RefreshCw size={16} /></span> Re-index All</button>
+            <button className="rag-btn-outline" onClick={handleReindexAll} disabled={isReindexing}>
+              <span className="icon-mr"><RefreshCw size={16} className={isReindexing ? 'spin' : ''} /></span>
+              {isReindexing ? 'Đang re-index...' : 'Re-index All'}
+            </button>
             <button className="rag-btn-primary" onClick={() => navigate('/admin/upload')}>
               <span className="icon-mr"><FilePlus size={16} color="white" /></span> Thêm tài liệu
             </button>
@@ -156,12 +178,20 @@ const RAGDocuments = () => {
           <div className="filter-dropdowns">
             <select className="filter-select" value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)}>
               <option value="">Tất cả loại</option>
-              <option value="Công văn">Công văn</option>
-              <option value="Quyết định">Quyết định</option>
-              <option value="Nghị định">Nghị định</option>
-              <option value="Thông tư">Thông tư</option>
-              <option value="Báo cáo">Báo cáo</option>
-              <option value="general">Khác</option>
+              <option value="general">Tổng hợp</option>
+              <option value="nghi-quyet">Nghị quyết</option>
+              <option value="quyet-dinh">Quyết định</option>
+              <option value="van-ban-co-ten-loai">Văn bản có tên loại</option>
+              <option value="cong-van">Công văn</option>
+              <option value="cong-dien">Công điện</option>
+              <option value="giay-moi">Giấy mời</option>
+              <option value="giay-gioi-thieu">Giấy giới thiệu</option>
+              <option value="bien-ban">Biên bản</option>
+              <option value="giay-nghi-phep">Giấy nghỉ phép</option>
+              <option value="to-trinh">Tờ trình</option>
+              <option value="bao-cao">Báo cáo</option>
+              <option value="ke-hoach">Kế hoạch</option>
+              <option value="thong-bao">Thông báo</option>
             </select>
             <select className="filter-select" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
               <option value="">Tất cả</option>

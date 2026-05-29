@@ -7,12 +7,20 @@ import {
 import './DocumentUpload.css';
 
 const CATEGORY_OPTIONS = [
-  { value: 'general',    label: 'Tổng hợp (tự động phát hiện)' },
-  { value: 'cong-van',   label: 'Công văn' },
-  { value: 'quyet-dinh', label: 'Quyết định' },
-  { value: 'to-trinh',   label: 'Tờ trình' },
-  { value: 'bao-cao',    label: 'Báo cáo' },
-  { value: 'ke-hoach',   label: 'Kế hoạch' },
+  { value: 'general',              label: 'Tổng hợp / pháp lý chung' },
+  { value: 'nghi-quyet',           label: 'Nghị quyết' },
+  { value: 'quyet-dinh',           label: 'Quyết định' },
+  { value: 'van-ban-co-ten-loai',  label: 'Văn bản có tên loại' },
+  { value: 'cong-van',             label: 'Công văn' },
+  { value: 'cong-dien',            label: 'Công điện' },
+  { value: 'giay-moi',             label: 'Giấy mời' },
+  { value: 'giay-gioi-thieu',      label: 'Giấy giới thiệu' },
+  { value: 'bien-ban',             label: 'Biên bản' },
+  { value: 'giay-nghi-phep',       label: 'Giấy nghỉ phép' },
+  { value: 'to-trinh',             label: 'Tờ trình' },
+  { value: 'bao-cao',              label: 'Báo cáo' },
+  { value: 'ke-hoach',             label: 'Kế hoạch' },
+  { value: 'thong-bao',            label: 'Thông báo' },
 ];
 
 const STATUS_ICON = {

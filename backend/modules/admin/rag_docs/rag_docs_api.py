@@ -67,6 +67,22 @@ def get_rag_stats():
         }
     })
 
+@admin_rag_docs_bp.route("/rag-documents/reindex", methods=["POST"])
+def reindex_rag_documents():
+    from backend.modules.admin.rag_docs.upload_service import reindex_all_raw_documents
+
+    payload = request.get_json(silent=True) or {}
+    chunk_size = int(payload.get("chunk_size", 1000))
+    chunk_overlap = int(payload.get("chunk_overlap", 200))
+    chunk_size = max(500, min(chunk_size, 4000))
+    chunk_overlap = max(0, min(chunk_overlap, chunk_size // 2))
+
+    result = reindex_all_raw_documents(
+        chunk_size=chunk_size,
+        chunk_overlap=chunk_overlap,
+    )
+    return jsonify({"success": True, "data": result})
+
 @admin_rag_docs_bp.route("/upload-history", methods=["GET"])
 def get_upload_history():
     from backend.models.rag_document import RagDocument
@@ -126,3 +142,32 @@ def upload_document():
             results.append({"filename": f.filename, "status": "error", "message": str(e)})
 
     return jsonify({"success": True, "data": results, "message": f"Đã nhận {len(results)} file, đang xử lý ngầm"})
+
+@admin_rag_docs_bp.route("/rag-documents/<int:doc_id>", methods=["DELETE"])
+def delete_rag_document(doc_id):
+    from backend.models.rag_document import RagDocument
+    from backend.extensions import db
+    import os
+
+    doc = RagDocument.query.get(doc_id)
+    if not doc:
+        return jsonify({"success": False, "message": "Không tìm thấy tài liệu"}), 404
+
+    # Xóa file vật lý trong thư mục raw
+    raw_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../backend/data/raw"))
+    file_path = os.path.join(raw_dir, doc.filename)
+    if os.path.exists(file_path):
+        try:
+            os.remove(file_path)
+        except Exception as e:
+            print(f"Lỗi khi xóa file vật lý {file_path}: {e}")
+
+    # Xóa trong DB
+    try:
+        db.session.delete(doc)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"success": False, "message": f"Lỗi DB: {str(e)}"}), 500
+
+    return jsonify({"success": True, "message": "Đã xóa tài liệu thành công"})

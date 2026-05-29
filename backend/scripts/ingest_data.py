@@ -15,11 +15,19 @@ logger = logging.getLogger(__name__)
 RAW_DIR = os.path.join(os.path.dirname(__file__), "../data/raw")
 
 DOC_TYPE_KEYWORDS = {
+    "nghi-quyet": ["nghi-quyet", "nghi_quyet", "nghiquyet"],
     "cong-van": ["cong-van", "cong_van"],
+    "cong-dien": ["cong-dien", "cong_dien", "congdien"],
     "quyet-dinh": ["quyet-dinh", "quyet_dinh"],
+    "van-ban-co-ten-loai": ["van-ban-co-ten-loai", "van_ban_co_ten_loai"],
+    "giay-moi": ["giay-moi", "giay_moi", "giaymoi"],
+    "giay-gioi-thieu": ["giay-gioi-thieu", "giay_gioi_thieu", "giaygioithieu"],
+    "bien-ban": ["bien-ban", "bien_ban", "bienban"],
+    "giay-nghi-phep": ["giay-nghi-phep", "giay_nghi_phep", "giaynghiphep"],
     "to-trinh": ["to-trinh", "to_trinh"],
     "bao-cao": ["bao-cao", "bao_cao"],
     "ke-hoach": ["ke-hoach", "ke_hoach"],
+    "thong-bao": ["thong-bao", "thong_bao", "thongbao"],
 }
 
 

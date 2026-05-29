@@ -17,8 +17,11 @@ Nếu không có căn cứ pháp lý từ ngữ cảnh RAG → tự suy luận c
 TUYỆT ĐỐI không để lại placeholder như [...] hay [Cần bổ sung...] trong output."""
 
 HUONG_DAN_NOI_DUNG = {
+    "Nghị quyết": "Gồm: Căn cứ pháp lý, phần quyết nghị theo các điều/khoản rõ ràng, nhiệm vụ tổ chức thực hiện và hiệu lực thi hành. Trình bày trang trọng, đúng thẩm quyền ban hành.",
     "Quyết định": "CẢNH BÁO: Trường noi_dung PHẢI theo đúng cấu trúc: Căn cứ... → QUYẾT ĐỊNH: → Điều 1, Điều 2, Điều 3, Điều 4. TUYỆT ĐỐI KHÔNG viết theo dạng thông báo, công văn, hay văn xuôi tự do. Gồm: Căn cứ pháp lý (mỗi căn cứ 1 dòng, kết thúc ;), QUYẾT ĐỊNH:, Điều 1 (nội dung chính), Điều 2... (các điều liên quan), Điều cuối-1 (hiệu lực thi hành), Điều cuối (trách nhiệm thi hành).",
+    "Văn bản có tên loại": "Soạn theo thể thức văn bản có tên loại: có tên loại ở giữa trang, trích yếu dưới tên loại, nội dung chia mục/điều/khoản phù hợp với yêu cầu.",
     "Công văn": "KHÔNG có tên loại giữa trang. Trích yếu dạng 'V/v ...' nằm ở cột trái dưới số hiệu. Bắt đầu nội dung bằng 'Kính gửi: ...' Gồm: Đoạn mở đầu (lý do, căn cứ), Nội dung chính (các ý rõ ràng), Đề nghị/Yêu cầu cụ thể.",
+    "Công điện": "Gồm phần nơi nhận điện, nội dung chỉ đạo/yêu cầu khẩn, nhiệm vụ cụ thể, thời hạn thực hiện nếu có. Văn phong ngắn gọn, rõ trách nhiệm, phù hợp tính chất công điện.",
     "Tờ trình": "Tờ trình BẮT BUỘC có đúng 3 phần với tiêu đề IN HOA, đánh số La Mã, KHÔNG dùng số thứ tự 1, 2, 3:\\n\\nI. SỰ CẦN THIẾT\\n(Trình bày lý do, thực trạng, sự cần thiết phải thực hiện)\\n\\nII. NỘI DUNG ĐỀ XUẤT\\n(Trình bày cụ thể nội dung xin phê duyệt: phạm vi, kinh phí, nguồn vốn, tiến độ...)\\n\\nIII. KIẾN NGHỊ\\n(Kính trình [tên cơ quan nhận] xem xét, chấp thuận...\\nKết thúc bằng ./)",
     "Báo cáo": "Gồm: I. Tình hình chung, II. Kết quả thực hiện, III. Tồn tại hạn chế, IV. Phương hướng nhiệm vụ.",
     "Kế hoạch": "Gồm: I. Mục đích yêu cầu, II. Nội dung kế hoạch (phân theo mục/giai đoạn), III. Tổ chức thực hiện.",
@@ -28,6 +31,7 @@ HUONG_DAN_NOI_DUNG = {
     "Chỉ thị": "Gồm: Nhận định tình hình, Các yêu cầu/nhiệm vụ cụ thể (đánh số), Tổ chức thực hiện.",
     "Giấy mời": "Gồm: Lý do mời, Thời gian địa điểm, Thành phần được mời, Yêu cầu chuẩn bị (nếu có).",
     "Giấy giới thiệu": "Gồm: Giới thiệu ông/bà... đến liên hệ công tác tại..., Đề nghị... tạo điều kiện giúp đỡ.",
+    "Giấy nghỉ phép": "Gồm căn cứ/đơn đề nghị nếu có, thông tin người được nghỉ phép, thời gian nghỉ, địa điểm nghỉ, trách nhiệm bàn giao công việc và xác nhận/phê duyệt.",
     "Phương án": "Gồm: I. Căn cứ xây dựng, II. Mục tiêu, III. Nội dung phương án, IV. Tiến độ thực hiện, V. Nguồn lực.",
     "Đề án": "Gồm: I. Sự cần thiết, II. Mục tiêu nhiệm vụ, III. Nội dung đề án, IV. Giải pháp, V. Kinh phí, VI. Tổ chức thực hiện.",
     "Chương trình": "Gồm: I. Mục đích yêu cầu, II. Nội dung chương trình (phân theo hạng mục/giai đoạn), III. Tiến độ, IV. Kinh phí.",
@@ -35,9 +39,30 @@ HUONG_DAN_NOI_DUNG = {
     "default": "Soạn thảo đầy đủ theo đúng thể thức văn bản hành chính Việt Nam."
 }
 
+DOC_TYPE_LABELS = {
+    "nghi-quyet": "Nghị quyết",
+    "quyet-dinh": "Quyết định",
+    "van-ban-co-ten-loai": "Văn bản có tên loại",
+    "cong-van": "Công văn",
+    "cong-dien": "Công điện",
+    "giay-moi": "Giấy mời",
+    "giay-gioi-thieu": "Giấy giới thiệu",
+    "bien-ban": "Biên bản",
+    "giay-nghi-phep": "Giấy nghỉ phép",
+    "to-trinh": "Tờ trình",
+    "bao-cao": "Báo cáo",
+    "ke-hoach": "Kế hoạch",
+    "thong-bao": "Thông báo",
+}
+
+
+def normalize_doc_type_label(doc_type: str) -> str:
+    return DOC_TYPE_LABELS.get(doc_type, doc_type or "Công văn")
+
+
 class PromptBuilder:
     def build_messages(self, metadata: dict, context_chunks: list[str], template_content: str) -> list[dict]:
-        doc_type_display = metadata.get("doc_type", "Công văn")
+        doc_type_display = normalize_doc_type_label(metadata.get("doc_type", "Công văn"))
         huong_dan = HUONG_DAN_NOI_DUNG.get(doc_type_display, HUONG_DAN_NOI_DUNG["default"])
 
         cap_tren_val = metadata.get("cap_tren", "").strip()

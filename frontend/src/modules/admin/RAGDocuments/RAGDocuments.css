@@ -5,6 +5,9 @@
   gap: 24px;
 }
 
+@keyframes spin { to { transform: rotate(360deg); } }
+.spin { animation: spin 1s linear infinite; }
+
 .rag-page-header {
   margin-bottom: 0px;
 }

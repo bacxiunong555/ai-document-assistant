@@ -1,19 +1,27 @@
 from flask import Blueprint, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
+import logging
 from backend.modules.user.drafting.drafting_service import create_draft, VALID_DOC_TYPES
 from backend.modules.user.drafting.template_service import TemplateService
 from backend.core.exceptions import ValidationError, NotFoundError
 
 drafting_bp = Blueprint("drafting", __name__, url_prefix="/api/drafting")
+logger = logging.getLogger(__name__)
 
 DOC_TYPE_LABELS = {
-    "cong-van": "Công văn",
+    "nghi-quyet": "Nghị quyết",
     "quyet-dinh": "Quyết định",
+    "van-ban-co-ten-loai": "Văn bản có tên loại",
+    "cong-van": "Công văn",
+    "cong-dien": "Công điện",
+    "giay-moi": "Giấy mời",
+    "giay-gioi-thieu": "Giấy giới thiệu",
+    "bien-ban": "Biên bản",
+    "giay-nghi-phep": "Giấy nghỉ phép",
     "to-trinh": "Tờ trình",
     "bao-cao": "Báo cáo",
     "ke-hoach": "Kế hoạch",
     "thong-bao": "Thông báo",
-    "bien-ban": "Biên bản",
 }
 
 
@@ -26,6 +34,12 @@ def generate():
         data = request.get_json(force=True)
         user_id = int(get_jwt_identity())
         result = create_draft(data, user_id)
+        logger.info(
+            "[DraftingAPI] result keys=%s sources=%d references=%d",
+            sorted(result.keys()) if isinstance(result, dict) else type(result),
+            len(result.get("sources", [])) if isinstance(result, dict) else 0,
+            len(result.get("rag_references", [])) if isinstance(result, dict) else 0,
+        )
         
         response = {"success": True, "data": result}
         headers = {'X-Processing-Time': f"{time.time() - start_time:.2f}s"}

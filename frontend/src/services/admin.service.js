@@ -20,6 +20,8 @@ export const adminService = {
   // --- RAG Documents ---
   getRagDocuments: () => api.get('/admin/rag-documents'),
   getRagStats: () => api.get('/admin/rag-stats'),
+  reindexRagDocuments: () => api.post('/admin/rag-documents/reindex'),
+  deleteRagDocument: (id) => api.delete(`/admin/rag-documents/${id}`),
 
   // --- Upload ---
   getUploadHistory: () => api.get('/admin/upload-history'),

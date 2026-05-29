@@ -1,7 +1,21 @@
 from backend.models.template import Template
 from backend.core.exceptions import ValidationError, NotFoundError
 
-VALID_DOC_TYPES = ["cong-van", "quyet-dinh", "to-trinh", "bao-cao", "ke-hoach", "thong-bao", "bien-ban"]
+VALID_DOC_TYPES = [
+    "nghi-quyet",
+    "quyet-dinh",
+    "van-ban-co-ten-loai",
+    "cong-van",
+    "cong-dien",
+    "giay-moi",
+    "giay-gioi-thieu",
+    "bien-ban",
+    "giay-nghi-phep",
+    "to-trinh",
+    "bao-cao",
+    "ke-hoach",
+    "thong-bao",
+]
 
 
 def validate_drafting_request(data: dict) -> dict:

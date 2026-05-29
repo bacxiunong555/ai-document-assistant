@@ -54,3 +54,16 @@ def get_vector_store() -> ChromaVectorStore:
             if _store_instance is None:
                 _store_instance = ChromaVectorStore()
     return _store_instance
+
+
+def reset_vector_store() -> ChromaVectorStore:
+    global _store_instance
+    with _lock:
+        store = _store_instance or ChromaVectorStore()
+        try:
+            store._db.delete_collection()
+            logger.info("[VectorStore] Da xoa collection %s", Config.CHROMA_COLLECTION_NAME)
+        except Exception as e:
+            logger.warning("[VectorStore] Khong the xoa collection %s: %s", Config.CHROMA_COLLECTION_NAME, e)
+        _store_instance = ChromaVectorStore()
+        return _store_instance
